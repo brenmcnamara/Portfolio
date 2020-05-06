@@ -29,6 +29,7 @@ documentation outlined below.
 
 - [API Service](./API-Service.md)
 - [Container Image](./API-Image.md)
+- [Code vs Data](./Code-vs-Data.md)
 - [Task](./Task.md)
 - [Unit](./Unit.md)
 - [Worker](./Worker.md)

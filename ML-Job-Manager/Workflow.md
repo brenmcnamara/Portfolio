@@ -77,3 +77,10 @@ more convenient to use.
   name is already known will result in an identification failure).
 
 - Use the database id for the workflow. All database ids are globally unique.
+
+## Code vs Data
+
+On the surface, Workflows don't seem to be much different from a task. It's
+just a routine that can be executed, so why have two separate types of routines.
+The reason has to do with the interesting relationship workflows have with
+code and data. This is discussed further [here](./Code-vs-Data.md).
