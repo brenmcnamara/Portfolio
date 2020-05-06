@@ -29,7 +29,17 @@ The actual engine is tucked away and the user should not need to interact with
 it directly, but under the hood, it does all the heavy lifting and plays an
 important role in keeping the code required for running routines simple.
 
-## Local Engine
+There are different Routine Engines that can be instantiated within the
+runtime. Each engine results in different behavior when tasks and workflows
+are executed.
+
+**NOTE: It is important to know that these engines are implementation details.
+From the application developer's perspective, one should never interact
+directly with an engine. These engines are initialized behind the scenes
+depending on how the lifecycle is initialized. Please look at the documentation
+on the [Lifecycle](./Lifecycle.md) for how to manage the runtime.**
+
+## Local Run Engine
 
 Consider the following code to run and wait for the results of a task:
 
@@ -48,21 +58,8 @@ async def do_stuff():
 
 ```
 
-Imagine running this code as a local python script / job (not on a distributed
-workflow). For routines that are running locally, a `LocalRunEngine` is
-instantiated and manages the process of running the above code. When the
-`LocalRunEngine` is active, the following happens when executing a routine:
+The `LocalRunEngine` is the simplest type of `RoutineEngine`. It simply
+runs the code as is. There is no additional processing or overhead with the
+`LocalRunEngine`.
 
-- Check the storage to see if this task was ever run before with the same
-  parameters. If it has, instead of running this code, just return the results
-  that have been stored.
-
-- Call the routine as a python co-routine.
-
-- When the co-routine is complete, store the results of the task in storage.
-
-- Return the results.
-
-The `LocalRunEngine` is a light-weight wrapper over the routine that's running.
-It doesn't do much other than interact with storage. This is the simplest type
-of engine that exists.
+## Remote Dispatcher Engine
