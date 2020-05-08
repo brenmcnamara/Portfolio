@@ -30,6 +30,7 @@ documentation outlined below.
 - [API Service](./API-Service.md)
 - [Container Image](./API-Image.md)
 - [Code vs Data](./Code-vs-Data.md)
+- [Routine ID](./Routine-ID.md)
 - [Task](./Task.md)
 - [Unit](./Unit.md)
 - [Worker](./Worker.md)
@@ -45,6 +46,7 @@ documentation outlined below.
 
 **Ideas for Later**
 
+- [Higher-Order Workflows](./Higher-Order-Workflows.md)
+- [Network Designer](./Network-Designer.md)
 - [Routine Discovery](./Routine-Discovery.md)
 - [Routine Triggers](./Routine-Triggers.md)
-- [Network Designer](./Network-Designer.md)

@@ -63,3 +63,37 @@ runs the code as is. There is no additional processing or overhead with the
 `LocalRunEngine`.
 
 ## Remote Dispatcher Engine
+
+For a [Workflow](./Workflow.md) to become distributed across many machines,
+executing a routine locally would need to be delegated to other workers. The
+`RemoteDispatcherEngine` handles this delegation.
+
+When a routine, such as a task, is called, the following happens:
+
+- The engine picks up that a task coroutine has been executed in the code.
+  It registers the task routine in local memory. It alerts the service that
+  the worker now has status `HANGING`.
+
+- The routine id and the arguments to the task are serialized and sent as
+  a [directive](./Worker-Directives.md) to the service. The directive indicates
+  that there is a task that needs to get started.
+
+- The service handles the work of finding a worker that can run the routine
+  and managing the communication with that worker.
+
+- Once the worker completes the task and provides return values for the
+  task, those arguments are forwarded to the original worker that requested
+  the task.
+
+- The routine id and serialized parameters get parsed. The engine then resolves
+  the completed task to the python coroutine that is awaiting on that task. The
+  coroutine is completed and the return values are resolved. If there are
+  no more coroutines awaiting, the engine switches the status of the worker to
+  `WORKING`.
+
+- At this point, the workflow can continue its work.
+
+- Once the workerflow finishes, the engine switches the status of the worker
+  to `IDLE`.
+
+### Argument Serialization
