@@ -5,6 +5,24 @@ A task can run a single unit or a collection of units, all of which are
 running in parallel. When the task is complete, all the units within the task
 are also complete. A task is associated with a version.
 
+## Task Name and Version
+
+When defining a task, that task is given a name and semver version. The name
+of the task must be unique among all tasks and workflows across the project.
+
+## Task Unique Identifier
+
+To identify a task in the system, you use the [Routine ID](./Routine-ID.md)
+of the task.
+
+## Tasks are Pure, Stateless Functions
+
+**TODO: Fill me in**
+
+## Tasks Results are Cached
+
+**TODO: Fill me in**
+
 ## Defining a Single-Unit Task
 
 Defining a task can be as follows:
@@ -47,32 +65,6 @@ Some requirements for tasks:
 - A task should not rely on side effects to manipulate parameters. Performing
   side effects on the input parameters will not be properly understood
   semantically by workflows or the distributed system.
-
-## Task Name and Version
-
-When defining a task, that task is given a name and semver version. The name
-of the task must be unique among all tasks and workflows across the project.
-
-## Task Unique Identifier
-
-Every task can be uniquely identifier in one of two ways. Depending on the
-particular context you are running, usually one of the identifiers are
-more convenient to use.
-
-- Using the task name and version: `{task-name}:{task-version}`. Note that
-  this identification only works in the context of a particular project, since
-  there can be another task with the same name and version in a different
-  project. To globally qualify across all projects, you can define the
-  task as follows: `{project-name}:{task-name}:{task-version}`. Note also that
-  in some contexts, just the task name is enough. When this identifier is used,
-  the system will do its best to fill in the missing information from the
-  runtime context. If more information than needed is given (such as including
-  the project name when the project name is already known), then that is fine,
-  as long as the information is correct (providing the incorrect project name
-  for a runtime where the project name is already known will result in an
-  identification failure).
-
-- Use the database id for the task. All database ids are globally unique.
 
 ## Define a Multi-Unit Task
 
@@ -141,3 +133,41 @@ Some important things to consider:
 
 - A multi-unit task takes a single input and returns a single output. If you
   want to use multiple inputs for a task, you can wrap them in an object.
+
+## Tasks for Defining Data
+
+One use of a task is to define data. You can rely on the fact that tasks
+cached to automatically cache any pre-processing steps that go into
+preparing a dataset:
+
+```python
+import asyncio
+
+from utils import define
+from utils.types import Data
+
+Model = ... # define model type
+
+@define.task(name="glove_embeddings", version="1.0.0")
+def glove_embeddings(dim: int) -> Data:
+  # Load glove embeddings based on the dimension
+  # Return the glove embeddings.
+
+
+@define.task(name="news_dataset", version="1.0.0")
+def news_dataset() -> Data:
+  # Load the news dataset from storage.
+  # Perform expensive pre-processing.
+  # Return news dataset
+
+
+@define.task(name="train_news_classifier", version="1.0.0")
+def train_news_classifier(epochs: int) -> Model:
+  embeddings, dataset = await asyncio.gather(glove_embeddings(dim=100),
+                                             news_dataset)
+
+  # Do the training.
+  # Return the model.
+
+
+```

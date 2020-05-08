@@ -97,3 +97,61 @@ When a routine, such as a task, is called, the following happens:
   to `IDLE`.
 
 ### Argument Serialization
+
+When a value is returned from a routine, the `RemoteDispatcherEngine` needs to
+send that value over to the service so it can forwarded to the requesting
+worker.
+
+That value needs to then get de-serialized from within that worker so it can be
+used. This whole process should happen under the hood such that the
+programmer is not aware this is happening. The goal is for calling returns
+and returning from routines should feel the same as executing some local
+function.
+
+The engine relies on a `Serializer` to make the needed serialization and
+deserialization calls.
+
+First, the engine communicates with a `SerializationRegistry` which contains
+all the serializers that exist in the worker. The registry takes the value
+and talks to each serializer in the registry to see if any are _claiming_
+the value as something they can serialize. Once a serializer has claimed the
+value, it is in charge of the serialization and deserialization process
+of the value.
+
+_NOTE: The assumption is then that on both the serializing worker
+and requesting (deserializing) worker, the same serializer exists. This may
+need to change in the future. One potential solution is that a worker must
+broadcast which serializers it has available. However, this is not an issue
+at the moment, and we may come back to this later._
+
+Here are some examples of serializers:
+
+- `NumericSerializer`: Serializes and deserializes numeric values, such as
+  float or int.
+
+- `CollectionSerializer`: Works with lists, sets, dicts, and tuples.
+
+- `BlobSerializer`: Works with large data, such as files.
+
+- `PyTorchTensorSerializer`: Serializes and deserializes PyTorch tensors.
+
+- `PyTorchModuleSerializer`: Works with PyTorch modules.
+
+Each serializer implements the following methods:
+
+- `claim`: Given a value, the serializer decides if it would like to claim
+  that value.
+
+- `name`: The unique name of the serializer. There cannot be another serializer
+  in the registry with the same name.
+
+- `serialize`: Given the value, this performs the serialization process.
+
+- `deserialize`: Given the serialized value, this perform the de-serialization.
+
+Note that for some of the serializers that are working with large data, such
+as the `BlobSerializer`, it would not be possible for the serializer to pass
+the data across the service connection. Instead, this data would be stored
+in a storage bucket and the paramter passed across the service connection
+would instead be a file reference to the data, possibly with some instructions
+on how to read and parse that file.
