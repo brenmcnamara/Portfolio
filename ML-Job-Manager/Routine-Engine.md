@@ -8,9 +8,10 @@ In any case, there is a lot of support needed for a routine to run and
 execute properly. Here are some examples of things that need to be managed
 by the runtime.
 
-- When a task or workflow is completed, the results need to be stored
-  somewhere. Location of storage needs to be aware of the specific task that
-  completed and the version of that task.
+- When a task or workflow is completed, the results may need to be sent to
+  a remote worker. These results would need to get serialized and sent
+  across the network. This would also have to work for large amounts of data,
+  like a large DL model that finished training.
 
 - When a task is started, there may be cases where we can avoid running the
   code. If we have run the same version of the task at some other point in the
@@ -18,8 +19,15 @@ by the runtime.
   Tasks are expected to be pure, deterministic, and have no side effects. Look
   through the documentation on [tasks](./Task.md) for more information.
 
-- Send directives to the service to complete sub-routines like tasks on other,
-  remote workers.
+- When a workflow is executing and comes up to a group of tasks that need to
+  be completed, it may want to distribute the work of those tasks across a
+  cluster of workers. The task [routine identifiers](./Routine-ID.md) and
+  [serialized arguments](./Argument-Serialization.md) would need to get sent
+  to another worker for execution.
+
+- The runtime needs to know what routine is currently running (if there is
+  any routine running), and if the running routine is hanging because it is
+  waiting for another routine on a remote worker to complete.
 
 - Run a Routine Trigger when a routine has completed (this is not yet supported
   and is listed as a [future feature](./Routine-Triggers.md)).
@@ -58,100 +66,59 @@ async def do_stuff():
 
 ```
 
-The `LocalRunEngine` is the simplest type of `RoutineEngine`. It simply
-runs the code as is. There is no additional processing or overhead with the
-`LocalRunEngine`.
+The `LocalRunEngine` is the simplest type of `RoutineEngine`, and it does
+not do much more than create a run loop and execute the routines.
 
-## Remote Dispatcher Engine
+The `LocalRunEngine` gets called on a single routine, usually a workflow.
+While the `LocalRunEngine` is working on this routine, it blocks the main
+thread. The routine may execute other sub-routines, which also block the main
+thread. Once the root routine is finished running, it returns control of the
+main thread to the program.
+
+## Remote Dispatch Engine
 
 For a [Workflow](./Workflow.md) to become distributed across many machines,
 executing a routine locally would need to be delegated to other workers. The
-`RemoteDispatcherEngine` handles this delegation.
+`RemoteDispatchEngine` handles this delegation.
 
-When a routine, such as a task, is called, the following happens:
+Unlike the `LocalRunEngine`, which is blocking the main thread, the
+`RemoteDispatchEngine` runs on a background thread. This is because the
+`RemoteDispatchEngine` is usually running inside a [worker](./Worker.md) which
+does not terminate. Workers keep running even when they are not doing any work
+and they listen for work coming from the service. That worker is doing many
+other things besides using the engine, such as communicating with the
+service.
 
-- The engine picks up that a task coroutine has been executed in the code.
-  It registers the task routine in local memory. It alerts the service that
-  the worker now has status `HANGING`.
+When the worker receives a directive from the service to start a routine,
+the following happens:
 
-- The routine id and the arguments to the task are serialized and sent as
-  a [directive](./Worker-Directives.md) to the service. The directive indicates
-  that there is a task that needs to get started.
+- find the executable for the particular routine that is being requested to run.
 
-- The service handles the work of finding a worker that can run the routine
-  and managing the communication with that worker.
+- deserialize the parameters provided when requesting the routine to start.
 
-- Once the worker completes the task and provides return values for the
-  task, those arguments are forwarded to the original worker that requested
-  the task.
+- start a new run loop on a background thread for the routine to execute.
 
-- The routine id and serialized parameters get parsed. The engine then resolves
-  the completed task to the python coroutine that is awaiting on that task. The
-  coroutine is completed and the return values are resolved. If there are
-  no more coroutines awaiting, the engine switches the status of the worker to
-  `WORKING`.
+- pass the deserialized parameters to the routine and start the run.
 
-- At this point, the workflow can continue its work.
+- when the routine executes a sub-routine, the routine execution is serialized
+  and sent as a directive to the service. The service is in charge of finding
+  another worker that can pick up the work. If the root routine is waiting for
+  other routines to finish executing, the root is then marked as `HANGING`.
 
-- Once the workerflow finishes, the engine switches the status of the worker
-  to `IDLE`.
+- Once the other works begin finishing the sub-routines and sending back the
+  results to the current worker, the results are deserialized and saved locally.
+  Once all the blocking sub-routines have completed, the hanging worker can
+  resume its work, and the status is switched back to `WORKING`.
 
-### Argument Serialization
+- Once the root routine has finished executing, the worker sends a signal
+  to the service indicating it has completed its routine, and the status of the
+  worker is switched to `IDLE`.
 
-When a value is returned from a routine, the `RemoteDispatcherEngine` needs to
-send that value over to the service so it can forwarded to the requesting
-worker.
+_NOTE: Currently, we only allow a single, root routine to run per engine.
+If an engine is working on a routine and receives a request from the service
+to start more work, this is undefined behavior. As of now, we don't handle this
+case explicitly (except maybe with an assert statement) and assume the service
+will never do this. This will need to be propery handled in the future._
 
-That value needs to then get de-serialized from within that worker so it can be
-used. This whole process should happen under the hood such that the
-programmer is not aware this is happening. The goal is for calling returns
-and returning from routines should feel the same as executing some local
-function.
-
-The engine relies on a `Serializer` to make the needed serialization and
-deserialization calls.
-
-First, the engine communicates with a `SerializationRegistry` which contains
-all the serializers that exist in the worker. The registry takes the value
-and talks to each serializer in the registry to see if any are _claiming_
-the value as something they can serialize. Once a serializer has claimed the
-value, it is in charge of the serialization and deserialization process
-of the value.
-
-_NOTE: The assumption is then that on both the serializing worker
-and requesting (deserializing) worker, the same serializer exists. This may
-need to change in the future. One potential solution is that a worker must
-broadcast which serializers it has available. However, this is not an issue
-at the moment, and we may come back to this later._
-
-Here are some examples of serializers:
-
-- `NumericSerializer`: Serializes and deserializes numeric values, such as
-  float or int.
-
-- `CollectionSerializer`: Works with lists, sets, dicts, and tuples.
-
-- `BlobSerializer`: Works with large data, such as files.
-
-- `PyTorchTensorSerializer`: Serializes and deserializes PyTorch tensors.
-
-- `PyTorchModuleSerializer`: Works with PyTorch modules.
-
-Each serializer implements the following methods:
-
-- `claim`: Given a value, the serializer decides if it would like to claim
-  that value.
-
-- `name`: The unique name of the serializer. There cannot be another serializer
-  in the registry with the same name.
-
-- `serialize`: Given the value, this performs the serialization process.
-
-- `deserialize`: Given the serialized value, this perform the de-serialization.
-
-Note that for some of the serializers that are working with large data, such
-as the `BlobSerializer`, it would not be possible for the serializer to pass
-the data across the service connection. Instead, this data would be stored
-in a storage bucket and the paramter passed across the service connection
-would instead be a file reference to the data, possibly with some instructions
-on how to read and parse that file.
+_NOTE: To learn about how arguments are serialized and deserialized between
+workers, read about [Argument Serialization](./Argument-Serialization.md)._

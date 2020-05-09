@@ -40,8 +40,17 @@ to another worker that can work.
 
 _Params_
 
+- arguments: The arguments to pass to the routine. This is a serialized
+  json structure with the keys `args` and `kwargs` which map to the corresponding
+  arguments of a python function. To learn more about argument serialization
+  and deserialization see the documentation on
+  [Argument Serialization](./Argument-Serialization.md)
+
+- requestingWorkerLocalExecutionID: This id is the one provided by the
+  requesting worker of the routine. It is used within the requesting worker
+  to resolve the routine execution.
+
 - routineID: The [routine id](./Routine-ID.md) of the routine being requested.
-- params: A set of parameters to forward to the routine.
 
 _NOTE: This API currently works when every task is a single unit of work.
 To move to multi-unit tasks, this directive may need to change._
@@ -59,3 +68,24 @@ When a worker completes a routine, it must communicate to the service that the
 routine has been successfully completed. If the routine was requested by
 another worker, the completed directive will be forwarded to the
 requesting worker.
+
+_Params_
+
+- requestingWorkerLocalExecutionID: This id is the one provided by the
+  requesting worker of the routine. It is used within the requesting worker
+  to resolve the routine execution.
+
+- result: This is the serialized result of the routine execution.
+
+`v1.routine.failed`
+
+If a routine fails to complete, the running worker alerts the service, which
+then forwards to directive to the requesting worker.
+
+_Params_
+
+- requestingWorkerLocalExecutionID: This id is the one provided by the
+  requesting worker of the routine. It is used within the requesting worker
+  to resolve the routine execution.
+
+- error: A string description of the error.
