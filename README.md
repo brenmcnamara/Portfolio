@@ -94,18 +94,18 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 
 ## Work Experience
 
-- [Cue](https://cue.app/) - Apr 2019 - Mar 2020
+- [Cue](https://cue.app/) - iOS Engineer: Apr 2019 - Mar 2020
 
   - Worked on the [Cue iOS Application](https://apps.apple.com/us/app/cue-social-calendar/id1377803825),
     which is a Social Calendar Product making it easier for people to plan with
     their friends, discover events, and manage their social lives.
-  - Used Swift Programming Language. The App was built using a custom GRPC-based
-    state management layer with UI built on Native Components and
+  - Used Swift programming language. The App was built using a custom GRPC-based
+    state management layer with UI built on native components and
     [LayoutKit](https://github.com/linkedin/LayoutKit).
-  - Delivered quick feature iterations, pixel-perfect design specs
+  - Delivered quick feature iterations, pixel-perfect design spec
     implementations, and fast, smooth iOS experiences.
 
-- [Oculus](https://www.oculus.com/?locale=en_US) - Aug 2017 - Nov 2018
+- [Oculus](https://www.oculus.com/?locale=en_US) - Software Engineer: Aug 2017 - Nov 2018
 
   - Worked on a product called [Oculus Dash](https://www.youtube.com/watch?v=SvP_RI_S-bw),
     which is an Overlay VR system built into the Oculus 2.0 OS.
@@ -116,7 +116,7 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
     in 3D space. Also worked on setting up some multi-threaded ReactVR APIs that
     communicated directly with the C++ ReactVR stack.
 
-- Facebook - June 2015 - Nov 2017
+- Facebook - Front-End Engineer: June 2015 - Nov 2017
 
   - Worked on internal tooling around (1) performance / latency tracking of
     Facebook's Web Tier and (2) Data Center Cluster Management and Planning.
