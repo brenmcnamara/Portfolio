@@ -14,7 +14,7 @@ My expertise is primarily in client-side UI development.
 I have worked on a number of iOS apps (using Swift, React-Native, and
 Objective-C), and Web Apps (using React, Typescript, Flow, Redux, Flux, and
 ThreeJS). Some of my work has been on less traditional UI systems, such as
-developing a CAD-like Web Application (using ThreeJS, WebGL, and React) while I was
+building a CAD-like Web Application (using ThreeJS, WebGL, and React) while I was
 at Facebook and developing overlay Virtual Reality experiences (using ReactVR,
 which is built on React Native) during my time at Oculus.
 
@@ -56,13 +56,13 @@ and have designed a number of app concepts and custom icons using these tools.
     put together notes summarizing my thoughts on the work and ideas for
     future research / investigation.
 
-  - Almost all papers have been related to research around Deep Learning for
+  - Almost all papers have been related to research in Deep Learning for
     Natural Language Understanding.
 
 - [Neural Machine Translation Modeling](https://github.com/brenmcnamara/NMT)
 
-  - This project is at its initial stages. It is the culmination of personal
-    research done in Neural Machine Translation using Deep Learning.
+  - This project is at its initial stages, and is the culmination of personal
+    research done in Neural Machine Translation with Deep Learning.
 
   - The goal is to implement many of the best models in NMT research to gain
     an intuition of how these models differ and best practices for data
@@ -97,8 +97,8 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 - [Cue](https://cue.app/) - iOS Engineer: Apr 2019 - Mar 2020
 
   - Worked on the [Cue iOS Application](https://apps.apple.com/us/app/cue-social-calendar/id1377803825),
-    which is a Social Calendar Product making it easier for people to plan with
-    their friends, discover events, and manage their social lives.
+    which is a Social Calendar Product making it easier for people to make plans
+    with their friends, discover events, and manage their social lives.
   - Used Swift programming language. The App was built using a custom GRPC-based
     state management layer with UI built on native components and
     [LayoutKit](https://github.com/linkedin/LayoutKit).
@@ -128,7 +128,7 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 ## Programming Languages and Frameworks
 
 - Very Good: Typescript / Javascript, Swift, Python, React, Redux, [Flow JS](https://flow.org/), NumPy
-- Good: ThreeJS, PyTorch, PyTorch, [GRPC](https://grpc.io/), Docker, Kubernetes, Pandas, Matplotlib, [GraphQL](https://graphql.org/)
+- Good: PyTorch, [GRPC](https://grpc.io/), Docker, Kubernetes, Pandas, ThreeJS, Matplotlib, [GraphQL](https://graphql.org/)
 - Okay: Figma, Objective-C, TravisCI, C++, [Framer](https://www.framer.com/), Java
 
 ## Relevant Coursework
