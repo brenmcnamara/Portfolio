@@ -33,6 +33,8 @@ The Trello Board for tracking progress is [here](https://trello.com/b/zRmkMlSn/9
 - [API Service](./API-Service.md)
 - [Container Image](./API-Image.md)
 - [Code vs Data](./Code-vs-Data.md)
+- [Execution Policies](./Execution-Policy.md)
+- [Kubernetes](./Kubernetes.md)
 - [Routine ID](./Routine-ID.md)
 - [Task](./Task.md)
 - [Unit](./Unit.md)
