@@ -62,6 +62,16 @@ the service that the work is currently being done. If a request for that work
 was initialized by another worker, the directive is forwarded from the service
 to the requesting worker to indicate that the work is starting.
 
+- requestingWorkerLocalExecutionID: This id is the one provided by the
+  requesting worker of the routine. It is used within the requesting worker
+  to resolve the routine execution.
+
+- routineID: The [routine id](./Routine-ID.md) that is starting.
+
+- arguments: The serialized arguments with which this routine is starting.
+
+_Parms_
+
 `v1.routine.completed`
 
 When a worker completes a routine, it must communicate to the service that the
@@ -74,6 +84,8 @@ _Params_
 - requestingWorkerLocalExecutionID: This id is the one provided by the
   requesting worker of the routine. It is used within the requesting worker
   to resolve the routine execution.
+
+- routineID: The [routine id](./Routine-ID.md) of the routine that is completed.
 
 - result: This is the serialized result of the routine execution.
 
@@ -88,4 +100,6 @@ _Params_
   requesting worker of the routine. It is used within the requesting worker
   to resolve the routine execution.
 
-- error: A string description of the error.
+- routineID: The [routine id](./Routine-ID.md) of the routine that failed.
+
+- errorMessage: A string description of the error.

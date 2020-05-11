@@ -46,7 +46,9 @@ documentation outlined below.
 
 **Ideas for Later**
 
+- [Generated Library Code](./Generated-Library-Code.md)
 - [Higher-Order Workflows](./Higher-Order-Workflows.md)
+- [Memory Improvements](./Memory-Improvements.md)
 - [Network Designer](./Network-Designer.md)
 - [Routine Discovery](./Routine-Discovery.md)
 - [Routine Triggers](./Routine-Triggers.md)
