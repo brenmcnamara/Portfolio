@@ -20,6 +20,9 @@ principles:
 For a deeper dive into the system architecture, you can explore the
 documentation outlined below.
 
+The Source Code can be found [here](https://github.com/9point).
+The Trello Board for tracking progress is [here](https://trello.com/b/zRmkMlSn/9point).
+
 **Overview**
 
 - [System Architecture](./System-Architecture.md)

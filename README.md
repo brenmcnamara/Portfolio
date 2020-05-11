@@ -3,7 +3,7 @@ Hi,
 My name is Brendan McNamara. I am a passionate software engineer driven to
 make real-world impact.
 
-I have a deep passion for the of AI technologies and, in particular, Deep Learning,
+I have a strong interest in AI technologies, in particular, Deep Learning,
 and have devoted a large chunk of my time to learning the math, theory, and
 core concepts behind the latest progress in the field. You can view
 my [Trello Board](https://trello.com/b/B8HdpyCe/ai) containing my roadmap
@@ -18,11 +18,12 @@ developing a CAD-like Web Application (using ThreeJS, WebGL, and React) while I 
 at Facebook and developing overlay Virtual Reality experiences (using ReactVR,
 which is built on React Native) during my time at Oculus.
 
-I also have experience working with design software such as Sketch and Figma
+I also have experience working with design software such as Sketch and Figma,
 and have designed a number of app concepts and custom icons using these tools.
 
 - [LinkedIn](https://www.linkedin.com/in/brendan-mcnamara-66130976/)
 - [Github](https://github.com/brenmcnamara)
+- You can reach out to me at brendan.d.mcnamara (at) vanderbilt.edu
 
 ## Personal Projects
 
@@ -63,7 +64,7 @@ and have designed a number of app concepts and custom icons using these tools.
   - This project is at its initial stages. It is the culmination of personal
     research done in Neural Machine Translation using Deep Learning.
 
-  - The goal is to implement many of the famous models in NMT research to gain
+  - The goal is to implement many of the best models in NMT research to gain
     an intuition of how these models differ and best practices for data
     pre-processing and hyperparameter configurations.
 
@@ -96,13 +97,13 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 - [Cue](https://cue.app/) - Apr 2019 - Mar 2020
 
   - Worked on the [Cue iOS Application](https://apps.apple.com/us/app/cue-social-calendar/id1377803825),
-    which is a Social Calendar Product making it easier for people to plan,
-    discover, and manage their social lives.
+    which is a Social Calendar Product making it easier for people to plan with
+    their friends, discover events, and manage their social lives.
   - Used Swift Programming Language. The App was built using a custom GRPC-based
     state management layer with UI built on Native Components and
     [LayoutKit](https://github.com/linkedin/LayoutKit).
   - Delivered quick feature iterations, pixel-perfect design specs
-    implementations, and fast, buttery-smooth iOS experiences.
+    implementations, and fast, smooth iOS experiences.
 
 - [Oculus](https://www.oculus.com/?locale=en_US) - Aug 2017 - Nov 2018
 
@@ -117,8 +118,8 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 
 - Facebook - June 2015 - Nov 2017
 
-  - Worked on internal tooling around (1) performance / latency tracking of Web
-    Services and (2) Data Center Cluster Management.
+  - Worked on internal tooling around (1) performance / latency tracking of
+    Facebook's Web Tier and (2) Data Center Cluster Management and Planning.
   - Used Javascript, FlowJS, Redux, an in-house Flux-like framework, SVG,
     WebGL, and ThreeJS.
   - Developed high-quality and fast web experiences using WebGL technologies and
@@ -139,7 +140,7 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
 - [Coursera Deep Learning Specialization by Andrew Ng](https://www.coursera.org/specializations/deep-learning) - Jan 2020
 
   - An introduction into Deep Learning topics.
-  - Includes courses for Convolution Neural Networks, and Sequence Models.
+  - Includes courses for Basic Neural Net Architectures, Convolution Neural Networks, and Sequence Models.
 
 - [Coursera Wash U Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning) - Jun 2016
 
@@ -148,7 +149,7 @@ Please feel free to [check out my Github](https://github.com/brenmcnamara)._
     clustering, tree-based classifiers, gaussian mixture models, and recommendation
     based algorithms.
 
-- [Vanderbilt University BS in Math and Computer Science](https://www.vanderbilt.edu/)
+- [Vanderbilt University BS in Math and Computer Science](https://www.vanderbilt.edu/) - 2015
   - Class of 2015, Cum Laude
   - Double-Majored in Math and Computer Science
 
