@@ -1,6 +1,6 @@
 # Worker
 
-A [Worker](./Worker.md) is some process associated with a project that is
+A Worker is some process associated with a project that is
 capable of doing work (this includes running routines). A worker can only
 work on a single [Unit](./Unit.md) at a time. To run multiple units in parallel,
 multiple workers will be needed. (Note that this may be changed in the future,
@@ -18,8 +18,7 @@ When a worker is started, the following happens:
   it creates a channel where [Worker Directives](./Worker-Directives.md) can
   be sent back and forth between the worker and the service.
 
-- The worker indicates to the service that it is ready to receive _work_. Work
-  meaning instructions on which routines to run.
+- The worker indicates to the service that it is ready to receive a unit of work.
 
 - While a worker has an open connection with the service, the service does
   repeated health checks on the worker. This is called a _heartbeat_. During
